@@ -100,21 +100,30 @@ public class BilheteriasController {
             System.err.println("Campos Vazios");
         }
         else{
-            ingresso.setPagamento(FormaPagamento.valueOf(formaPagamentoString));
-            ingresso.setId_bilheteria(Long.parseLong(idString));
-            ingresso.setData_venda(Date.valueOf(LocalDate.now()));
-            ingresso.setId_cliente(clienteLogado.getId());
-            ingressoDAO.create(ingresso);
+            try {
+                ingresso.setPagamento(FormaPagamento.valueOf(formaPagamentoString));
+                ingresso.setId_bilheteria(Long.parseLong(idString));
+                ingresso.setData_venda(Date.valueOf(LocalDate.now()));
+                ingresso.setId_cliente(clienteLogado.getId());
+                ingressoDAO.create(ingresso);
 
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Sucesso");
-            alert.setHeaderText("Ingresso comprado");
-            alert.show();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso");
+                alert.setHeaderText("Ingresso comprado");
+                alert.show();
 
-            //A QUANTIDADE DE INGRESSOS É ATUALIZADA AUTOMATICAMENTE USANDO O TRIGGER, APÓS A COMPRA
+                //A QUANTIDADE DE INGRESSOS É ATUALIZADA AUTOMATICAMENTE USANDO O TRIGGER, APÓS A COMPRA
 
-            btn_buscar(event);//Atualiza o número de ingressos
+                btn_buscar(event);//Atualiza o número de ingressos
+            }catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText("Erro ao comprar ingresso");
+                alert.setContentText("Sem ingressos para compra.");
+                alert.show();
+                e.printStackTrace(); // opcional
+            }
         }
     }
 
